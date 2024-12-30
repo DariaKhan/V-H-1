@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      .button {
+        margin-top: 10px;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        text-align: center;
+        text-decoration: none;
+        outline: none;
+        color: #fff;
+        background-color: #4caf50;
+        border: none;
+        border-radius: 15px;
+      }
+      .container {
+        margin-top: 20px;
+      }
+      .list-item {
+        cursor: pointer;
+        transition: 0.3s;
+      }
+      .list-item:hover {
+        color: red;
+        text-decoration: line-through;
+      }
+    </style>
+    <title>Список элементов</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  </head>
+  <body>
+    <div id="app" class="container">
+      <h2>ЗАДАНИЕ NO1 - ПЕРЕВЕРНУТЬ ТЕКСТ ПРИ НАЖАТИИ КНОПКИ</h2>
+      <button class="button" @click="reverseText">{{ buttonText }}</button>
+
+      <br />
+
+      <h2>ЗАДАНИЕ NO2 - СПИСОК ЭЛЕМЕНТОВ</h2>
+      <h3>Список покупок</h3>
+      <ul>
+        <li
+          v-for="(item, index) in listItem"
+          :key="index"
+          @click="removeItem(index)"
+          class="list-item"
+        >
+          {{ item }}
+        </li>
+      </ul>
+      <input
+        type="text"
+        v-model="newItemText"
+        placeholder="Введите новый элемент"
+      />
+      <br />
+      <button class="button" @click="addItem">Добавить</button>
+    </div>
+
+    <script>
+      const { createApp } = Vue;
+
+      createApp({
+        data() {
+          return {
+            buttonText: "НАЖМИ НА КНОПКУ, ЧТОБЫ ПЕРЕВЕРНУТЬ ТЕКСТ",
+            listItem: ["яблоки", "помидоры", "огурцы", "бананы", "киви"],
+            newItemText: "",
+          };
+        },
+        methods: {
+          reverseText() {
+            this.buttonText = this.buttonText.split("").reverse().join("");
+          },
+          addItem() {
+            const text = this.newItemText.trim();
+            if (this.listItem.includes(text)) {
+              alert("Такой товар уже есть в списке");
+              return;
+            } else if (text === "") {
+              alert("Введите название товара");
+              return;
+            } else {
+              this.listItem.push(text);
+              this.newItemText = "";
+            }
+          },
+          removeItem(index) {
+            console.log(`Удаление элемента: ${this.listItem[index]}`);
+            const isConfirmed = confirm(
+              "Вы уверены, что хотите удалить этот элемент?"
+            );
+            if (isConfirmed) {
+              this.listItem.splice(index, 1);
+            } else {
+              console.log("Удаление отменено.");
+            }
+          },
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>
